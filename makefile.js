@@ -140,11 +140,12 @@ for (var i = 0; i < argv.length; i++) {
             // List appropriate flags
             var my_flags = "";
             my_flags = my_flags.split(" ");
-            end_flags.push("-s", "NO_FILESYSTEM=1",
-                "-s", "TOTAL_MEMORY=256MB"
-                //"-s", "ASSERTIONS=1",
-                //"-s", "SAFE_HEAP=1"    
-            );
+            end_flags.push(
+        "-s", "NO_FILESYSTEM=1",
+        "-s", "TOTAL_MEMORY=512MB",
+        "-s", "ALLOW_MEMORY_GROWTH=1",
+        "-s", "MAXIMUM_MEMORY=4GB"
+        );
             for (var j = 0; j < my_flags.length; j++) end_flags.push(my_flags[j]);
             break;
         case "--enable-wasm":
