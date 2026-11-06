@@ -585,10 +585,47 @@
             document.getElementById("canvas").requestPointerLock();
         }
 
+        let escPressedAt = 0;
+        let escTimer = null;
+        const ESC_HOLD_DURATION = 1000;
+
         function fullScreen() {
             lockMouse();
             halfix.fullscreen();
         }
+
+        document.addEventListener("keydown", function(e) {
+            if (e.key !== "Escape" || !document.fullscreenElement) return;
+            if (escTimer !== null) return;
+
+            e.preventDefault();
+            escPressedAt = Date.now();
+
+            escTimer = setTimeout(function() {
+                if (Date.now() - escPressedAt >= ESC_HOLD_DURATION) {
+                    document.exitFullscreen();
+                }
+            }, ESC_HOLD_DURATION);
+        });
+
+        document.addEventListener("keyup", function(e) {
+            if (e.key !== "Escape") return;
+
+            if (escTimer !== null) {
+                clearTimeout(escTimer);
+                escTimer = null;
+            }
+
+            escPressedAt = 0;
+        });
+
+        document.addEventListener("fullscreenchange", function() {
+            if (!document.fullscreenElement && escTimer !== null) {
+                clearTimeout(escTimer);
+                escTimer = null;
+                escPressedAt = 0;
+            }
+        });
     </script>
     <style>
         .sidebar {
